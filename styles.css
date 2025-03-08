@@ -98,3 +98,25 @@ button:hover {
 #themeToggle:hover {
     opacity: 0.8;
 }
+
+progress {
+    width: 100%;
+    height: 10px;
+    border-radius: 5px;
+    overflow: hidden;
+    appearance: none;
+}
+
+progress::-webkit-progress-bar {
+    background-color: #ddd;
+    border-radius: 5px;
+}
+
+progress::-webkit-progress-value {
+    background-color: #4caf50; /* Green color */
+    transition: width 0.5s ease-in-out;
+}
+
+progress::-moz-progress-bar {
+    background-color: #4caf50;
+}

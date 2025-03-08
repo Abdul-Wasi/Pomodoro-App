@@ -1,11 +1,13 @@
 document.addEventListener("DOMContentLoaded", () => {
     let timerDisplay = document.getElementById("timer");
+    let progressBar = document.getElementById("progressBar");
     let startBtn = document.getElementById("startBtn");
     let pauseResumeBtn = document.getElementById("pauseResumeBtn");
     let resetBtn = document.getElementById("resetBtn");
     let themeToggle = document.getElementById("themeToggle");
   
-    let timeLeft = 25 * 60; // 25 minutes in seconds
+    let totalTime = 25 * 60; // 25 minutes in seconds
+    let timeLeft = totalTime;
     let timer;
     let isRunning = false;
     let isPaused = false;
@@ -13,9 +15,11 @@ document.addEventListener("DOMContentLoaded", () => {
     function updateDisplay() {
       let minutes = Math.floor(timeLeft / 60);
       let seconds = timeLeft % 60;
-      timerDisplay.innerText = `${String(minutes).padStart(2, "0")}:${String(
-        seconds
-      ).padStart(2, "0")}`;
+      timerDisplay.innerText = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+
+      //Update progress bar percentage
+      let progressPercentage = (timeLeft / totalTime) * 100;
+      progressBar.value = progressPercentage;
     }
   
     function startTimer() {
@@ -68,7 +72,7 @@ document.addEventListener("DOMContentLoaded", () => {
   
     function resetTimer() {
       clearInterval(timer);
-      timeLeft = 25 * 60; // Reset to 25 minutes
+      timeLeft = totalTime; // Reset to 25 minutes
       isRunning = false;
       isPaused = false;
       updateDisplay();
