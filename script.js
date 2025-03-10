@@ -1,3 +1,5 @@
+let alarmSound = new Audio("alarm.mp3"); // Load the alarm sound
+
 document.addEventListener("DOMContentLoaded", () => {
   let timerDisplay = document.getElementById("timer");
   let progressBar = document.getElementById("progressBar");
@@ -6,7 +8,9 @@ document.addEventListener("DOMContentLoaded", () => {
   let resetBtn = document.getElementById("resetBtn");
   let customTimeInput = document.getElementById("customTime");
   let setTimeBtn = document.getElementById("setTimeBtn"); // New Set Time Button
-  let themeToggle = document.getElementById("themeToggle");
+  let blueThemeBtn = document.getElementById("blueTheme");
+  let greenThemeBtn = document.getElementById("greenTheme");
+  let darkThemeBtn = document.getElementById("darkTheme");
 
   let totalTime = 25 * 60; // Default: 25 minutes in seconds
   let timeLeft = totalTime;
@@ -15,82 +19,86 @@ document.addEventListener("DOMContentLoaded", () => {
   let isPaused = false;
 
   function updateDisplay() {
-      let minutes = Math.floor(timeLeft / 60);
-      let seconds = timeLeft % 60;
-      timerDisplay.innerText = `${String(minutes).padStart(2, "0")}:${String(seconds).padStart(2, "0")}`;
+    let minutes = Math.floor(timeLeft / 60);
+    let seconds = timeLeft % 60;
+    timerDisplay.innerText = `${String(minutes).padStart(2, "0")}:${String(
+      seconds
+    ).padStart(2, "0")}`;
 
-      // Update progress bar percentage
-      let progressPercentage = (timeLeft / totalTime) * 100;
-      progressBar.value = progressPercentage;
+    // Update progress bar percentage
+    let progressPercentage = (timeLeft / totalTime) * 100;
+    progressBar.value = progressPercentage;
   }
 
   function setTime() {
-      let customMinutes = parseInt(customTimeInput.value);
-      if (!isNaN(customMinutes) && customMinutes > 0) {
-          totalTime = customMinutes * 60; // Convert minutes to seconds
-          timeLeft = totalTime;
-          updateDisplay();
-      } else {
-          alert("Please enter a valid time (at least 1 minute).");
-      }
+    let customMinutes = parseInt(customTimeInput.value);
+    if (!isNaN(customMinutes) && customMinutes > 0) {
+      totalTime = customMinutes * 60; // Convert minutes to seconds
+      timeLeft = totalTime;
+      updateDisplay();
+    } else {
+      alert("Please enter a valid time (at least 1 minute).");
+    }
   }
 
   function startTimer() {
-      if (!isRunning) {
-          isRunning = true;
-          isPaused = false;
-          startBtn.disabled = true; // Disable start after first press
-          pauseResumeBtn.innerText = "Pause";
+    if (!isRunning) {
+      isRunning = true;
+      isPaused = false;
+      startBtn.disabled = true; // Disable start after first press
+      pauseResumeBtn.innerText = "Pause";
 
-          timer = setInterval(() => {
-              if (timeLeft > 0) {
-                  timeLeft--;
-                  updateDisplay();
-              } else {
-                  clearInterval(timer);
-                  alert("Pomodoro session completed!");
-                  isRunning = false;
-                  startBtn.disabled = false;
-                  pauseResumeBtn.innerText = "Pause";
-              }
-          }, 1000);
-      }
+      timer = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          updateDisplay();
+        } else {
+          clearInterval(timer);
+          alarmSound.play();
+          alert("Pomodoro session completed!");
+          isRunning = false;
+          startBtn.disabled = false;
+          pauseResumeBtn.innerText = "Pause";
+        }
+      }, 1000);
+    }
   }
 
   function pauseResumeTimer() {
-      if (isRunning) {
-          clearInterval(timer);
-          isRunning = false;
-          isPaused = true;
-          pauseResumeBtn.innerText = "Resume";
-      } else if (isPaused) {
-          isRunning = true;
-          isPaused = false;
-          pauseResumeBtn.innerText = "Pause";
+    if (isRunning) {
+      clearInterval(timer);
+      isRunning = false;
+      isPaused = true;
+      pauseResumeBtn.innerText = "Resume";
+    } else if (isPaused) {
+      isRunning = true;
+      isPaused = false;
+      pauseResumeBtn.innerText = "Pause";
 
-          timer = setInterval(() => {
-              if (timeLeft > 0) {
-                  timeLeft--;
-                  updateDisplay();
-              } else {
-                  clearInterval(timer);
-                  alert("Pomodoro session completed!");
-                  isRunning = false;
-                  startBtn.disabled = false;
-                  pauseResumeBtn.innerText = "Pause";
-              }
-          }, 1000);
-      }
+      timer = setInterval(() => {
+        if (timeLeft > 0) {
+          timeLeft--;
+          updateDisplay();
+        } else {
+          clearInterval(timer);
+          alarmSound.play();
+          alert("Pomodoro session completed!");
+          isRunning = false;
+          startBtn.disabled = false;
+          pauseResumeBtn.innerText = "Pause";
+        }
+      }, 1000);
+    }
   }
 
   function resetTimer() {
-      clearInterval(timer);
-      timeLeft = totalTime; // Reset to selected/custom time
-      isRunning = false;
-      isPaused = false;
-      updateDisplay();
-      startBtn.disabled = false;
-      pauseResumeBtn.innerText = "Pause";
+    clearInterval(timer);
+    timeLeft = totalTime; // Reset to selected/custom time
+    isRunning = false;
+    isPaused = false;
+    updateDisplay();
+    startBtn.disabled = false;
+    pauseResumeBtn.innerText = "Pause";
   }
 
   setTimeBtn.addEventListener("click", setTime); // Event listener for setting time
@@ -100,21 +108,21 @@ document.addEventListener("DOMContentLoaded", () => {
 
   updateDisplay(); // Initialize display
 
-  // DARK MODE TOGGLE LOGIC
-  if (localStorage.getItem("darkMode") === "enabled") {
-      document.body.classList.add("dark-mode");
-      themeToggle.innerText = "☀️ Light Mode";
+  // THEME SWITCHING LOGIC
+  function applyTheme(theme) {
+    document.body.classList.remove("blue-theme", "green-theme", "dark-mode");
+    document.body.classList.add(theme);
+    localStorage.setItem("selectedTheme", theme);
   }
 
-  themeToggle.addEventListener("click", () => {
-      document.body.classList.toggle("dark-mode");
+  // Load saved theme from localStorage
+  let savedTheme = localStorage.getItem("selectedTheme");
+  if (savedTheme) {
+    applyTheme(savedTheme);
+  }
 
-      if (document.body.classList.contains("dark-mode")) {
-          localStorage.setItem("darkMode", "enabled");
-          themeToggle.innerText = "☀️ Light Mode";
-      } else {
-          localStorage.setItem("darkMode", "disabled");
-          themeToggle.innerText = "🌙 Dark Mode";
-      }
-  });
+  // Theme switch button event listeners
+  blueThemeBtn.addEventListener("click", () => applyTheme("blue-theme"));
+  greenThemeBtn.addEventListener("click", () => applyTheme("green-theme"));
+  darkThemeBtn.addEventListener("click", () => applyTheme("dark-mode"));
 });

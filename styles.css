@@ -1,12 +1,13 @@
 /* Google Font */
 @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;600&display=swap');
 
+/* General Styles */
 body {
     font-family: 'Poppins', sans-serif;
     text-align: center;
     background-color: #f4f4f4;
     color: #333;
-    transition: background 0.3s ease-in-out;
+    transition: background 0.3s ease-in-out, color 0.3s ease-in-out;
     padding: 20px;
 }
 
@@ -114,6 +115,42 @@ progress::-moz-progress-bar {
     background-color: #4caf50;
 }
 
+/* Theme Buttons */
+.theme-buttons {
+    display: flex;
+    justify-content: center;
+    margin-top: 15px;
+}
+
+.theme-buttons button {
+    padding: 10px;
+    font-size: 14px;
+    cursor: pointer;
+    border-radius: 5px;
+    margin: 5px;
+    border: none;
+    transition: 0.3s;
+}
+
+#blueTheme {
+    background-color: #007bff;
+    color: white;
+}
+
+#greenTheme {
+    background-color: #28a745;
+    color: white;
+}
+
+#darkTheme {
+    background-color: #222;
+    color: white;
+}
+
+.theme-buttons button:hover {
+    opacity: 0.8;
+}
+
 /* Dark Mode */
 .dark-mode {
     background-color: #222;
@@ -129,7 +166,7 @@ progress::-moz-progress-bar {
 }
 
 .dark-mode button {
-    color: white;
+    color: black;
 }
 
 #themeToggle {
@@ -147,4 +184,42 @@ progress::-moz-progress-bar {
 
 #themeToggle:hover {
     opacity: 0.8;
+}
+
+/* Blue Theme */
+.blue-theme {
+    background-color: #d0ebff;
+    color: #003366;
+}
+
+.blue-theme .container {
+    background: #89cff0;
+}
+
+.blue-theme #timer {
+    background: #007bff;
+}
+
+.blue-theme button {
+    background-color: #0056b3;
+    color: white;
+}
+
+/* Green Theme */
+.green-theme {
+    background-color: #d4edda;
+    color: #155724;
+}
+
+.green-theme .container {
+    background: #a3e635;
+}
+
+.green-theme #timer {
+    background: #28a745;
+}
+
+.green-theme button {
+    background-color: #218838;
+    color: white;
 }
