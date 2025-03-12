@@ -43,26 +43,35 @@ document.addEventListener("DOMContentLoaded", () => {
 
   function startTimer() {
     if (!isRunning) {
-      isRunning = true;
-      isPaused = false;
-      startBtn.disabled = true; // Disable start after first press
-      pauseResumeBtn.innerText = "Pause";
+        isRunning = true;
+        isPaused = false;
+        startBtn.disabled = true; // Disable start after first press
+        pauseResumeBtn.innerText = "Pause";
 
-      timer = setInterval(() => {
-        if (timeLeft > 0) {
-          timeLeft--;
-          updateDisplay();
-        } else {
-          clearInterval(timer);
-          alarmSound.play();
-          alert("Pomodoro session completed!");
-          isRunning = false;
-          startBtn.disabled = false;
-          pauseResumeBtn.innerText = "Pause";
-        }
-      }, 1000);
+        // Show spinner for 1 second before starting
+        let spinner = document.getElementById("loadingSpinner");
+        spinner.classList.add("show-spinner");
+
+        setTimeout(() => {
+            spinner.classList.remove("show-spinner");
+
+            timer = setInterval(() => {
+                if (timeLeft > 0) {
+                    timeLeft--;
+                    updateDisplay();
+                } else {
+                    clearInterval(timer);
+                    alarmSound.play();
+                    alert("Pomodoro session completed!");
+                    isRunning = false;
+                    startBtn.disabled = false;
+                    pauseResumeBtn.innerText = "Pause";
+                }
+            }, 1000);
+        }, 1000);
     }
-  }
+}
+
 
   function pauseResumeTimer() {
     if (isRunning) {
